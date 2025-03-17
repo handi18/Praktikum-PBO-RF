@@ -1,0 +1,60 @@
+#1.
+from abc import ABC, abstractmethod
+
+# Kelas abstrak Plant
+class Plant(ABC):
+    def __init__(self, name, water_needs, fertilizer_needs):
+        self.name = name
+        self.water_needs = water_needs
+        self.fertilizer_needs = fertilizer_needs
+    
+    @abstractmethod
+    def grow(self):
+        pass
+    
+    def calculate_needs(self, rainfall, soil_moisture):
+        # Mengurangi kebutuhan air berdasarkan curah hujan
+        adjusted_water = max(0, self.water_needs - (rainfall / 2))
+        
+        # Kebutuhan pupuk tetap sama
+        adjusted_fertilizer = self.fertilizer_needs
+        
+        return adjusted_water, adjusted_fertilizer
+    
+    def show_needs(self, rainfall, soil_moisture):
+        adjusted_water, adjusted_fertilizer = self.calculate_needs(rainfall, soil_moisture)
+        print(f"Weather Report: Rainfall = {rainfall} mm, Soil Moisture = {soil_moisture}%")
+        print(f"Adjusted Water Needs: {adjusted_water} liters (reduced due to rain)")
+        print(f"Adjusted Fertilizer Needs: {adjusted_fertilizer} kg")
+
+# Kelas RicePlant turunan dari Plant
+class RicePlant(Plant):
+    def __init__(self):
+        super().__init__("Rice", 20, 4)
+    
+    def grow(self):
+        print("Rice is growing in the paddy field")
+
+# Kelas CornPlant turunan dari Plant
+class CornPlant(Plant):
+    def __init__(self):
+        super().__init__("Corn", 25, 3)
+    
+    def grow(self):
+        print("Corn is growing in the farmland")
+
+# Simulasi cuaca
+rainfall = 10  # mm
+soil_moisture = 75  # %
+
+# Tanaman Padi
+rice = RicePlant()
+rice.grow()
+rice.show_needs(rainfall, soil_moisture)
+
+print("\n")
+
+# Tanaman Jagung
+corn = CornPlant()
+corn.grow()
+corn.show_needs(rainfall, soil_moisture)
