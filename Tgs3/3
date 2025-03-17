@@ -1,0 +1,86 @@
+#3.
+class BankAccount:
+    exchange_rates = {"USD": 1, "EUR": 1.098, "IDR": 15500}
+
+    def __init__(self, balance, currency):
+        self.balance = balance
+        self.currency = currency
+
+    def convert_to_usd(self):
+        if self.currency == "EUR":
+            converted_balance = self.balance * self.exchange_rates["EUR"]
+        elif self.currency == "IDR":
+            converted_balance = self.balance / self.exchange_rates["IDR"]
+        else:
+            converted_balance = self.balance
+
+        print(f"Converted to USD: ${converted_balance:.2f}")
+        return converted_balance
+
+    def convert_to_eur(self):
+        if self.currency == "USD":
+            converted_balance = self.balance / self.exchange_rates["EUR"]
+        elif self.currency == "IDR":
+            converted_balance = self.balance / 16800
+        else:
+            converted_balance = self.balance
+
+        print(f"Converted to EUR: €{converted_balance:.2f}")
+        return converted_balance
+
+    def convert_to_idr(self):
+        if self.currency == "USD":
+            converted_balance = self.balance * self.exchange_rates["IDR"]
+        elif self.currency == "EUR":
+            converted_balance = self.balance * 16800
+        else:
+            converted_balance = self.balance
+
+        print(f"Converted to IDR: Rp{converted_balance:,.2f}")
+        return converted_balance
+
+    def __add__(self, other):
+        if self.currency != other.currency:
+            converted_balance = other.convert_to_usd()
+            total_balance = self.balance + converted_balance
+        else:
+            total_balance = self.balance + other.balance
+
+        return BankAccount(total_balance, "USD")
+
+    def __sub__(self, other):
+        if self.currency != other.currency:
+            converted_balance = other.convert_to_usd()
+        else:
+            converted_balance = other.balance
+
+        if self.balance < converted_balance:
+            print("Insufficient balance for withdrawal!")
+            return self  # Saldo tetap sama
+
+        return BankAccount(self.balance - converted_balance, self.currency)
+
+    def apply_interest(self):
+        interest_rate = 0.02 if self.balance >= 5000 else 0.01
+        self.balance += self.balance * interest_rate
+        print(f"New balance after applying interest: {self.currency}{self.balance:.2f}")
+
+    def __str__(self):
+        return f"Bank Account: {self.currency}{self.balance:.2f}"
+
+
+john = BankAccount(5000, "USD")
+print(f"John's Account: Initial Balance = ${john.balance}")
+john.apply_interest()
+
+emily = BankAccount(1000, "EUR")
+print(f"\nEmily's Account: Initial Balance = €{emily.balance}")
+
+# Konversi ke USD
+emily.convert_to_usd()
+
+# Konversi ke IDR
+john.convert_to_idr()
+
+emily = emily - BankAccount(2000, "USD")
+print(f"Emily's Account: Balance remains at €{emily.balance}")
