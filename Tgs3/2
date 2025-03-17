@@ -1,0 +1,55 @@
+#2.
+from abc import ABC, abstractmethod
+
+class employee(ABC):
+
+    def __init__(self, nama, role, hours_work, task_comp):
+        self.nama = nama
+        self.role = role
+        self.hours_work = hours_work
+        self.task_comp = task_comp
+
+    @abstractmethod
+    def work(self):
+        pass
+
+    def eval_performance(self):
+        #jika hours work > task complete = low
+        if self.hours_work > self.task_comp:
+            return "low performance"
+        #jika hours work < task complete = high
+        elif self.hours_work < self.task_comp:
+            return "high performance"
+        #jika hours work = task complete = med
+        else :
+            return "medium performance"
+    
+
+class SoftwareEngineer(employee):
+
+    def work(self):
+        return f"{self.nama} (Software Engineer) is coding."
+
+class DataScientist(employee):
+
+    def work(self):
+        return f"{self.nama} (Data Scientist) is analyzing data."
+
+class ProductManager(employee):
+
+    def work(self):
+        return f"{self.nama} (Product Manager) is managing the product roadmap."
+
+
+alice = SoftwareEngineer("Alice", "Software Engineer", 8, 10)
+bob = DataScientist("Bob", "Data Scientist", 8, 8)
+charlie = ProductManager("Charlie", "Product Manager", 8, 8)
+david = SoftwareEngineer("David", "Software Engineer", 10, 8)
+
+# employee work and performance ratings
+employees = [alice, bob, charlie, david]
+
+for employee in employees:
+    print(employee.work())
+    print(f"Performance Rating: {employee.eval_performance()}")
+    print()
