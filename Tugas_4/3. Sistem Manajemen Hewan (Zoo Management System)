@@ -1,1 +1,108 @@
+from abc import ABC, abstractmethod
 
+# Abstraksi: Kelas Animal
+class Animal(ABC):
+    def __init__(self, name, age):
+        self.__name = name      # Enkapsulasi
+        self.__age = age        # Enkapsulasi
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def age(self):
+        return self.__age
+
+    @abstractmethod
+    def make_sound(self):
+        pass
+
+    def info(self):
+        print(f"{self.name} berusia {self.age} tahun.")
+
+# Kelas turunan
+class Dog(Animal):
+    def make_sound(self):
+        print(f"{self.name} menggonggong: 'Guk guk!'")
+
+class Cat(Animal):
+    def make_sound(self):
+        print(f"{self.name} mengeong: 'Meong~'")
+
+class Bird(Animal):
+    def make_sound(self):
+        print(f"{self.name} berkicau: 'Cuit cuit!'")
+
+# Manajemen Kebun Binatang
+class Zoo:
+    def __init__(self):
+        self.animals = []
+
+    def add_animal(self, animal):
+        if not isinstance(animal, Animal):
+            raise TypeError("Hanya objek dari kelas Animal yang bisa ditambahkan.")
+        self.animals.append(animal)
+        print(f"Hewan '{animal.name}' berhasil ditambahkan ke kebun binatang.")
+
+    def show_animals(self):
+        if not self.animals:
+            print("Kebun binatang kosong.")
+        else:
+            print("\nDaftar Hewan:")
+            for animal in self.animals:
+                animal.info()
+                animal.make_sound()
+
+def main():
+    zoo = Zoo()
+
+    while True:
+        print("\nMenu:")
+        print("1. Tambah hewan")
+        print("2. Lihat daftar hewan")
+        print("3. Keluar")
+
+        choice = input("Masukkan pilihan (1/2/3): ")
+
+        try:
+            if choice == '1':
+                jenis = input("Masukkan jenis hewan (dog/cat/bird): ").strip().lower()
+                nama = input("Masukkan nama hewan: ").strip()
+                umur = input("Masukkan umur hewan: ").strip()
+
+                if not nama or not umur:
+                    raise ValueError("Nama dan umur hewan tidak boleh kosong.")
+
+                umur = int(umur)
+                if umur <= 0:
+                    raise ValueError("Umur hewan harus lebih dari 0.")
+
+                if jenis == "dog":
+                    hewan = Dog(nama, umur)
+                elif jenis == "cat":
+                    hewan = Cat(nama, umur)
+                elif jenis == "bird":
+                    hewan = Bird(nama, umur)
+                else:
+                    raise ValueError("Jenis hewan tidak dikenali. Pilih dog, cat, atau bird.")
+
+                zoo.add_animal(hewan)
+
+            elif choice == '2':
+                zoo.show_animals()
+
+            elif choice == '3':
+                print("Keluar dari program. Terima kasih!")
+                break
+
+            else:
+                raise ValueError("Pilihan tidak valid. Masukkan angka 1, 2, atau 3.")
+
+        except ValueError as ve:
+            print(f"Error: {ve}")
+        except TypeError as te:
+            print(f"Error: {te}")
+
+if __name__ == "__main__":
+    main()
