@@ -1,1 +1,61 @@
+def tampilkan_menu():
+    print("\nPilih aksi:")
+    print("1. Tambah tugas")
+    print("2. Hapus tugas")
+    print("3. Tampilkan daftar tugas")
+    print("4. Keluar")
 
+def tambah_tugas(tugas_list):
+    tugas = input("Masukkan tugas yang ingin ditambahkan: ").strip()
+    if not tugas:
+        raise ValueError("Tugas tidak boleh kosong.")
+    tugas_list.append(tugas)
+    print("Tugas berhasil ditambahkan!")
+
+def hapus_tugas(tugas_list):
+    if not tugas_list:
+        print("Daftar tugas kosong. Tidak ada yang bisa dihapus.")
+        return
+    try:
+        index = int(input("Masukkan nomor tugas yang ingin dihapus: ")) - 1
+        if index < 0 or index >= len(tugas_list):
+            raise IndexError("Nomor tugas tidak valid.")
+        tugas = tugas_list.pop(index)
+        print(f"Tugas '{tugas}' berhasil dihapus!")
+    except ValueError:
+        print("Input tidak valid. Harap masukkan angka.")
+    except IndexError as e:
+        print(e)
+
+def tampilkan_tugas(tugas_list):
+    if not tugas_list:
+        print("Daftar Tugas Kosong.")
+    else:
+        print("Daftar Tugas:")
+        for idx, tugas in enumerate(tugas_list, 1):
+            print(f"{idx}. {tugas}")
+
+def main():
+    tugas_list = []
+
+    while True:
+        tampilkan_menu()
+        pilihan = input("Masukkan pilihan (1/2/3/4): ").strip()
+
+        try:
+            if pilihan == '1':
+                tambah_tugas(tugas_list)
+            elif pilihan == '2':
+                hapus_tugas(tugas_list)
+            elif pilihan == '3':
+                tampilkan_tugas(tugas_list)
+            elif pilihan == '4':
+                print("Keluar dari program. Sampai jumpa!")
+                break
+            else:
+                raise ValueError("Pilihan tidak valid. Masukkan angka 1-4.")
+        except ValueError as e:
+            print(e)
+
+if __name__ == "__main__":
+    main()
